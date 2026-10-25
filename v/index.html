@@ -31,7 +31,6 @@
     object-fit:contain; background:#000; display:block;
   }
 
-  /* Butang bunyi — hanya keluar selagi video senyap */
   #bunyi{
     position:fixed; left:50%; bottom:calc(74px + env(safe-area-inset-bottom));
     transform:translateX(-50%);
@@ -46,7 +45,6 @@
   #bunyi svg{ width:18px; height:18px; fill:#111; flex:0 0 auto; }
   @keyframes naik{ from{ opacity:0; transform:translate(-50%,10px);} to{ opacity:1; transform:translate(-50%,0);} }
 
-  /* Menunggu muat turun awal */
   #muat{
     position:fixed; inset:0; display:grid; place-items:center; z-index:4;
     color:#8b95a3; font-size:12px; letter-spacing:.14em; pointer-events:none;
@@ -79,15 +77,27 @@
 (function(){
   var v     = document.getElementById('player'),
       bunyi = document.getElementById('bunyi'),
-      muat  = document.getElementById('muat');
+      muat  = document.getElementById('muat'),
+      hidup = false;
 
   function kemasBunyi(){
     if (v.muted) { bunyi.classList.add('show'); }
     else { bunyi.classList.remove('show'); }
   }
 
+  /* Hidupkan bunyi serta-merta pada SEBARANG sentuhan / scroll / kekunci */
+  function bunyikan(){
+    if (hidup) return;
+    hidup = true;
+    v.muted  = false;
+    v.volume = 1;
+    var p = v.play();
+    if (p && typeof p.catch === 'function') p.catch(function(){ v.muted = true; hidup = false; });
+    kemasBunyi();
+  }
+
   function main(){
-    v.muted = true;                 // jamin main sendiri di semua pelayar
+    v.muted = true;
     var p = v.play();
     if (p && typeof p.then === 'function') {
       p.then(function(){ muat.classList.add('sorok'); kemasBunyi(); })
@@ -95,20 +105,15 @@
     }
   }
 
-  bunyi.addEventListener('click', function(){
-    v.muted = false;
-    v.volume = 1;
-    v.play().catch(function(){});
-    kemasBunyi();
-  });
+  bunyi.addEventListener('click', function(e){ e.stopPropagation(); bunyikan(); });
 
-  // Klik di mana-mana pada video juga buka bunyi
-  v.addEventListener('click', function(){
-    if (v.muted) { v.muted = false; v.volume = 1; kemasBunyi(); }
+  var isyarat = ['pointerdown','touchstart','mousedown','keydown','scroll','wheel','touchend'];
+  isyarat.forEach(function(ev){
+    document.addEventListener(ev, bunyikan, { passive:true });
+    window.addEventListener(ev, bunyikan, { passive:true });
   });
 
   v.addEventListener('volumechange', kemasBunyi);
-  v.addEventListener('playing',      function(){ muat.classList.add('sorok'); });
   v.addEventListener('loadeddata',   function(){ muat.classList.add('sorok'); });
 
   document.addEventListener('visibilitychange', function(){
