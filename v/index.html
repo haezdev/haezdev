@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#08131f">
 <title>Jemputan</title>
-<!-- build:8 -->
+<!-- build:9 -->
 
 <meta property="og:type" content="video.other">
 <meta property="og:title" content="Jemputan">
@@ -101,10 +101,11 @@
     border:1px solid rgba(215,178,90,.45);
     box-shadow:0 10px 26px rgba(0,0,0,.45);
     transform:translateY(20%);
-    transition:transform 1.25s cubic-bezier(.22,.61,.36,1);
-    will-change:transform;
+    opacity:0;
+    transition:transform 1.25s cubic-bezier(.22,.61,.36,1), opacity .5s ease .1s;
+    will-change:transform, opacity;
   }
-  body.buka .kad{ transform:translateY(-46%); }
+  body.naik .kad{ transform:translateY(-46%); opacity:1; }
 
   /* poket depan sampul (surat keluar dari belakang ni) */
   .env-front{
