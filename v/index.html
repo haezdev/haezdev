@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#0b1a33">
 <title>Jemputan</title>
-<!-- build:6 -->
+<!-- build:7 -->
 
 <meta property="og:type" content="video.other">
 <meta property="og:title" content="Jemputan">
@@ -58,13 +58,17 @@
   /* Gambar kad — bergerak perlahan supaya nampak hidup */
   #kad{
     position:absolute; inset:0;
-    background:url("poster.jpg") center center / cover no-repeat;
+    background-color:#0b1a33;
+    background-image:url("poster.jpg");
+    background-position:center center;
+    background-size:contain;
+    background-repeat:no-repeat;
     animation: nafas 14s ease-in-out infinite alternate;
     will-change: transform;
   }
   @keyframes nafas{
     from{ transform:scale(1); }
-    to  { transform:scale(1.055); }
+    to  { transform:scale(1.03); }
   }
 
   /* Cahaya emas melintas atas kad */
