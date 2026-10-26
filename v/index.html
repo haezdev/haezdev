@@ -91,6 +91,12 @@
   }
 
   /* Butang meterai emas */
+  #bawah{
+    position:absolute; left:0; right:0;
+    bottom:calc(7vh + env(safe-area-inset-bottom));
+    z-index:2;
+    display:grid; justify-items:center; gap:20px;
+  }
   #meterai{
     position:relative; z-index:2;
     display:grid; place-items:center; gap:0;
@@ -103,7 +109,6 @@
       0 0 44px rgba(215,178,90,.42),
       inset 0 0 22px rgba(0,0,0,.55);
     animation: denyut 2.6s ease-in-out infinite;
-    margin-top:-6vh;
   }
   @keyframes denyut{
     0%,100%{ box-shadow:0 0 0 1px rgba(215,178,90,.35), 0 0 0 10px rgba(215,178,90,.08), 0 0 40px rgba(215,178,90,.34), inset 0 0 22px rgba(0,0,0,.55); }
@@ -113,8 +118,8 @@
 
   /* Teks arahan */
   #arahan{
-    position:absolute; z-index:2; bottom:calc(9vh + env(safe-area-inset-bottom));
-    width:100%; text-align:center; color:var(--emas-cerah);
+    position:static; z-index:2;
+    width:auto; text-align:center; color:var(--emas-cerah);
     font-size:15px; letter-spacing:.22em; text-transform:uppercase;
     text-shadow:0 2px 12px rgba(0,0,0,.7);
     animation: hayun 2.6s ease-in-out infinite;
@@ -158,6 +163,7 @@
     <div id="kilau"></div>
     <div id="lapis"></div>
 
+    <div id="bawah">
     <div id="meterai">
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <rect x="2.5" y="5" width="19" height="14" rx="1.6"/>
@@ -168,6 +174,7 @@
     <div id="arahan">
       Ketuk untuk buka jemputan
       <small>Bunyi akan berbunyi selepas ditekan</small>
+    </div>
     </div>
   </button>
 
