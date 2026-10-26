@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#08131f">
 <title>Jemputan</title>
-<!-- build:9 -->
+<!-- build:10 -->
 
 <meta property="og:type" content="video.other">
 <meta property="og:title" content="Jemputan">
@@ -106,6 +106,7 @@
     will-change:transform, opacity;
   }
   body.naik .kad{ transform:translateY(-46%); opacity:1; }
+  body.zoom .kad{ transform:translateY(-46%) scale(3.1); }
 
   /* poket depan sampul (surat keluar dari belakang ni) */
   .env-front{
@@ -189,7 +190,7 @@
   /* kilat emas masa surat keluar */
   #kilat{
     position:fixed; inset:0; z-index:7; pointer-events:none; opacity:0;
-    background:radial-gradient(circle at 50% 46%, rgba(255,242,205,.6), rgba(255,242,205,0) 60%);
+    background:radial-gradient(circle at 50% 46%, rgba(255,242,205,.34), rgba(255,242,205,0) 60%);
   }
   #kilat.on{ animation:kilat .75s ease-out forwards; }
   @keyframes kilat{
@@ -259,9 +260,10 @@
     mula = true;
 
     badan.classList.add('buka');                    // meterai pecah + flap terbuka
-    setTimeout(function(){ badan.classList.add('naik'); kilat.classList.add('on'); }, 520);
-    setTimeout(function(){ kilat.classList.remove('on'); }, 1300);
-    setTimeout(mainVideo, 1250);                    // surat keluar -> video + bunyi
+    setTimeout(function(){ badan.classList.add('naik'); kilat.classList.add('on'); }, 480);
+    setTimeout(function(){ badan.classList.add('zoom'); }, 1020);
+    setTimeout(function(){ kilat.classList.remove('on'); }, 1250);
+    setTimeout(mainVideo, 1500);                    // surat penuh skrin -> video + bunyi
   }
 
   function tunjukBunyi(){
