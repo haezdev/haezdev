@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow,noarchive,noimageindex">
 <meta name="referrer" content="no-referrer">
-<meta name="theme-color" content="#000000">
-<title>Video</title>
+<meta name="theme-color" content="#0b1a33">
+<title>Jemputan</title>
 
 <meta property="og:type" content="video.other">
-<meta property="og:title" content="Video">
+<meta property="og:title" content="Jemputan">
 <meta property="og:video" content="video.mp4">
 <meta property="og:video:secure_url" content="video.mp4">
 <meta property="og:video:type" content="video/mp4">
@@ -18,109 +18,208 @@
 <meta property="og:image" content="poster.jpg">
 
 <style>
-  :root{ color-scheme: dark; }
+  :root{
+    color-scheme: dark;
+    --emas:#d7b25a;
+    --emas-cerah:#f3dfa0;
+    --biru:#0b1a33;
+  }
   *{ margin:0; padding:0; box-sizing:border-box; }
-  html,body{ height:100%; background:#000; overflow:hidden; }
+  html,body{ height:100%; background:var(--biru); overflow:hidden; }
   body{
+    font-family: "Georgia","Times New Roman",serif;
     display:grid; place-items:center;
-    font-family: system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
     -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
   }
+
+  /* ---------- Video (di belakang) ---------- */
   #player{
-    width:100%; height:100%; max-height:100dvh;
-    object-fit:contain; background:#000; display:block;
+    position:fixed; inset:0;
+    width:100%; height:100%;
+    object-fit:contain; background:#000;
+    opacity:0; transition:opacity .65s ease;
+    z-index:1;
+  }
+  body.buka #player{ opacity:1; }
+
+  /* ---------- Pintu masuk: kad jemputan ---------- */
+  #pintu{
+    position:fixed; inset:0; z-index:3;
+    display:grid; place-items:center;
+    background:var(--biru);
+    cursor:pointer; border:0; padding:0;
+    overflow:hidden;
+    transition:opacity .65s ease, transform .65s cubic-bezier(.4,0,.2,1);
+  }
+  body.buka #pintu{ opacity:0; transform:scale(1.07); pointer-events:none; }
+
+  /* Gambar kad — bergerak perlahan supaya nampak hidup */
+  #kad{
+    position:absolute; inset:0;
+    background:url("poster.jpg") center center / cover no-repeat;
+    animation: nafas 14s ease-in-out infinite alternate;
+    will-change: transform;
+  }
+  @keyframes nafas{
+    from{ transform:scale(1); }
+    to  { transform:scale(1.055); }
   }
 
-  #bunyi{
-    position:fixed; left:50%; bottom:calc(74px + env(safe-area-inset-bottom));
-    transform:translateX(-50%);
-    z-index:6; display:none; align-items:center; gap:8px;
-    padding:10px 18px; border:0; border-radius:999px; cursor:pointer;
-    background:rgba(255,255,255,.94); color:#111;
-    font-size:14px; font-weight:600; letter-spacing:.01em;
-    box-shadow:0 8px 28px rgba(0,0,0,.45);
-    animation: naik .28s ease-out both;
+  /* Cahaya emas melintas atas kad */
+  #kilau{
+    position:absolute; inset:-40%;
+    background:linear-gradient(115deg,
+        rgba(255,255,255,0) 38%,
+        rgba(255,240,190,.16) 47%,
+        rgba(255,255,255,0) 56%);
+    animation: kilau 7s ease-in-out infinite;
+    pointer-events:none;
   }
-  #bunyi.show{ display:inline-flex; }
-  #bunyi svg{ width:18px; height:18px; fill:#111; flex:0 0 auto; }
-  @keyframes naik{ from{ opacity:0; transform:translate(-50%,10px);} to{ opacity:1; transform:translate(-50%,0);} }
+  @keyframes kilau{
+    0%,100%{ transform:translateX(-32%); opacity:0; }
+    45%    { opacity:1; }
+    70%    { transform:translateX(32%); opacity:0; }
+  }
 
-  #muat{
-    position:fixed; inset:0; display:grid; place-items:center; z-index:4;
-    color:#8b95a3; font-size:12px; letter-spacing:.14em; pointer-events:none;
-    transition:opacity .3s ease;
+  /* Lapisan gelap bawah supaya butang jelas */
+  #lapis{
+    position:absolute; inset:0; pointer-events:none;
+    background:
+      radial-gradient(circle at 50% 46%, rgba(0,0,0,0) 42%, rgba(4,12,26,.55) 100%),
+      linear-gradient(to top, rgba(4,12,26,.86) 0%, rgba(4,12,26,0) 34%);
   }
-  #muat.sorok{ opacity:0; }
+
+  /* Butang meterai emas */
+  #meterai{
+    position:relative; z-index:2;
+    display:grid; place-items:center; gap:0;
+    width:112px; height:112px; border-radius:50%;
+    background:radial-gradient(circle at 32% 28%, #2a4a7d, #12294c 62%, #0a1a33);
+    border:2px solid var(--emas);
+    box-shadow:
+      0 0 0 1px rgba(215,178,90,.35),
+      0 0 0 10px rgba(215,178,90,.10),
+      0 0 44px rgba(215,178,90,.42),
+      inset 0 0 22px rgba(0,0,0,.55);
+    animation: denyut 2.6s ease-in-out infinite;
+    margin-top:-6vh;
+  }
+  @keyframes denyut{
+    0%,100%{ box-shadow:0 0 0 1px rgba(215,178,90,.35), 0 0 0 10px rgba(215,178,90,.08), 0 0 40px rgba(215,178,90,.34), inset 0 0 22px rgba(0,0,0,.55); }
+    50%    { box-shadow:0 0 0 1px rgba(215,178,90,.55), 0 0 0 18px rgba(215,178,90,.05), 0 0 66px rgba(215,178,90,.55), inset 0 0 22px rgba(0,0,0,.55); }
+  }
+  #meterai svg{ width:44px; height:44px; fill:none; stroke:var(--emas-cerah); stroke-width:1.5; }
+
+  /* Teks arahan */
+  #arahan{
+    position:absolute; z-index:2; bottom:calc(9vh + env(safe-area-inset-bottom));
+    width:100%; text-align:center; color:var(--emas-cerah);
+    font-size:15px; letter-spacing:.22em; text-transform:uppercase;
+    text-shadow:0 2px 12px rgba(0,0,0,.7);
+    animation: hayun 2.6s ease-in-out infinite;
+  }
+  #arahan small{
+    display:block; margin-top:10px; font-size:11.5px;
+    letter-spacing:.14em; color:rgba(243,223,160,.62);
+    text-transform:none; font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+  }
+  @keyframes hayun{
+    0%,100%{ opacity:.72; transform:translateY(0); }
+    50%    { opacity:1;   transform:translateY(-4px); }
+  }
+
+  /* Kilat emas masa buka */
+  #kilat{
+    position:fixed; inset:0; z-index:5; pointer-events:none; opacity:0;
+    background:radial-gradient(circle at 50% 46%, rgba(255,240,200,.55), rgba(255,240,200,0) 62%);
+  }
+  #kilat.on{ animation: kilat .68s ease-out forwards; }
+  @keyframes kilat{
+    0%  { opacity:0; }
+    22% { opacity:1; }
+    100%{ opacity:0; }
+  }
 </style>
 </head>
 <body>
+
   <video id="player"
          src="video.mp4"
-         poster="poster.jpg"
          controls
-         autoplay
-         muted
          playsinline
          webkit-playsinline
          preload="auto"
          controlslist="nodownload"
          disablepictureinpicture></video>
 
-  <div id="muat">MEMUATKAN…</div>
+  <button id="pintu" type="button" aria-label="Buka jemputan">
+    <div id="kad"></div>
+    <div id="kilau"></div>
+    <div id="lapis"></div>
 
-  <button id="bunyi" type="button">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg>
-    <span>Ketik untuk bunyi</span>
+    <div id="meterai">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="2.5" y="5" width="19" height="14" rx="1.6"/>
+        <path d="M3 6.2l9 6.4 9-6.4"/>
+      </svg>
+    </div>
+
+    <div id="arahan">
+      Ketuk untuk buka jemputan
+      <small>Bunyi akan berbunyi selepas ditekan</small>
+    </div>
   </button>
+
+  <div id="kilat"></div>
 
 <script>
 (function(){
   var v     = document.getElementById('player'),
-      bunyi = document.getElementById('bunyi'),
-      muat  = document.getElementById('muat'),
-      hidup = false;
+      pintu = document.getElementById('pintu'),
+      kilat = document.getElementById('kilat'),
+      buka  = false;
 
-  function kemasBunyi(){
-    if (v.muted) { bunyi.classList.add('show'); }
-    else { bunyi.classList.remove('show'); }
-  }
+  function mulaBuka(){
+    if (buka) return;
+    buka = true;
 
-  /* Hidupkan bunyi serta-merta pada SEBARANG sentuhan / scroll / kekunci */
-  function bunyikan(){
-    if (hidup) return;
-    hidup = true;
-    v.muted  = false;
+    kilat.classList.add('on');
+    document.body.classList.add('buka');
+
+    v.muted  = false;          // klik = sentuhan sah, bunyi dibenarkan
     v.volume = 1;
-    var p = v.play();
-    if (p && typeof p.catch === 'function') p.catch(function(){ v.muted = true; hidup = false; });
-    kemasBunyi();
-  }
 
-  function main(){
-    v.muted = true;
     var p = v.play();
-    if (p && typeof p.then === 'function') {
-      p.then(function(){ muat.classList.add('sorok'); kemasBunyi(); })
-       .catch(function(){ muat.classList.add('sorok'); kemasBunyi(); });
+    if (p && typeof p.catch === 'function') {
+      p.catch(function(){
+        // jika pelayar masih menolak, main senyap dan tunjuk butang bunyi
+        v.muted = true;
+        v.play().catch(function(){});
+        tunjukBunyi();
+      });
     }
+    setTimeout(function(){ kilat.classList.remove('on'); }, 800);
   }
 
-  bunyi.addEventListener('click', function(e){ e.stopPropagation(); bunyikan(); });
+  function tunjukBunyi(){
+    if (document.getElementById('bunyiLagi')) return;
+    var b = document.createElement('button');
+    b.id = 'bunyiLagi';
+    b.textContent = '🔊 Ketik untuk bunyi';
+    b.style.cssText = 'position:fixed;left:50%;bottom:calc(78px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:6;padding:11px 20px;border:0;border-radius:999px;background:rgba(255,255,255,.95);color:#111;font:600 14px system-ui,sans-serif;box-shadow:0 8px 26px rgba(0,0,0,.45);cursor:pointer';
+    b.onclick = function(){ v.muted = false; v.volume = 1; v.play().catch(function(){}); b.remove(); };
+    document.body.appendChild(b);
+  }
 
-  var isyarat = ['pointerdown','touchstart','mousedown','keydown','scroll','wheel','touchend'];
-  isyarat.forEach(function(ev){
-    document.addEventListener(ev, bunyikan, { passive:true });
-    window.addEventListener(ev, bunyikan, { passive:true });
+  pintu.addEventListener('click', mulaBuka);
+  pintu.addEventListener('touchend', function(e){ e.preventDefault(); mulaBuka(); }, { passive:false });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); mulaBuka(); }
   });
 
-  v.addEventListener('volumechange', kemasBunyi);
-  v.addEventListener('loadeddata',   function(){ muat.classList.add('sorok'); });
-
-  document.addEventListener('visibilitychange', function(){
-    if (!document.hidden && v.paused && !v.ended) main();
-  });
-
-  main();
+  // Jika pengguna tekan play pada bar kawalan video (jarang), pastikan bunyi hidup
+  v.addEventListener('play', function(){ if (!v.muted) return; if (buka) { v.muted = false; } });
 })();
 </script>
 </body>
